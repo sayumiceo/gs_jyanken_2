@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/janken.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overlock:wght@900&family=Roboto:wght@500&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Overlock:wght@900&family=Roboto:wght@500&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<title>じゃんけん</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>いちごパンケーキ全部食べて</h1>
+    </header>
+
+    <main>
+        <!-- パンケーキの画像とコンピュータの手 -->
+        <div class="game-area">
+            <div id="computer-hand" class="computer-hand">🤖</div>
+            <img src="./img/pancake03.png" alt="Pancake" class="pancake">
+        </div>
+        
+        <!-- 勝敗のメッセージ -->
+        <div id="message" class="message"></div> <!-- 初期状態ではメッセージを空に。 -->
+    
+
+        <!-- ユーザーの選択（グー、チョキ、パー） -->
+        <div class="choices">  
+            <div id="gu_btn" class="hand">✊</div>
+            <div id="cho_btn" class="hand">✌️</div>
+            <div id="par_btn" class="hand">✋</div>
+        </div>
+
+        <!-- Playボタン -->
+        <button class="play-button">PLAY</button>
+
+        <!-- retry ボタン -->
+        <button id="retry-button" class="retry-button" style="display: none;">リトライ</button>
+
+         <!-- end message  -->
+        <div id="endgame-message" class="endgame-message"></div>
+
+    </main>
+
+    
+    <footer></footer>
+  
+    <script>
+const pancakeStates = {
+  // ゲームの状態が 数字 のときに表示する画像のパス
+  0: './img/pancake00.png',
+  1: './img/pancake01.png',
+  2: './img/pancake02.png',
+  3: './img/pancake03.png',
+  4: './img/pancake04.png',
+  5: './img/pancake05.png',
+  6: './img/pancake06.png',
+  7: './img/pancake07.png'
+};
+
+let currentState = 3; // Starting state
+
+ // currentStateが0または7になったときの処理
+function updatePancakeState(won) {
+  if (won) {
+    currentState = Math.max(0, currentState - 1); // 0が最小値
+  } else {
+    currentState = Math.min(7, currentState + 1); // 7が最大値
+  }
+
+  // Update the image source css読み込み・画像切り替え
+  document.querySelector('.pancake').src = pancakeStates[currentState];
+
+
+  // ゲームオーバーまたは勝利のメッセージを表示
+     if (currentState === 0 || currentState === 7) {
+
+      // 条件 ? 真の場合の値 : 偽の場合の値;
+        const message = currentState === 0 ? "You successfully ate them all🤤🍴" : "NO MORE PANCAKES FOR ME🚫🤮";
+        
+        $("#endgame-message").text(message).css("visibility", "visible"); //非表示と表示を切り替え
+        $("#retry-button").show(); // リトライボタンを表示. display: none;が設定されていた要素を、画面上に表示
+        $(".play-button").hide(); // PLAYボタンを非表示に 
+    }
+}
+
+$(document).ready(function() {
+  // ユーザーが手を選択
+  $(".hand").on("click", function() {
+    $(".hand").removeClass("selected"); //ユーザーが新たに手を選択するたびに、selected クラスを削除。以前に選択されていた手の選択状態をリセット
+    $(this).addClass("selected");  //クリックされた特定の「手」に selected クラスを追加
+  });
+
+  // PLAYボタンを押すとゲームスタート
+  $(".play-button").on("click", function() {
+    const userChoice = $(".hand.selected").attr("id"); //選択された要素の id 属性の値を取得. 値を userChoice
+    if (!userChoice) {     //userChoice が偽っぽい値の場合
+      alert("手を選んで！");
+      return;
+    }
+
+    // コンピュータの手をランダムに選択して表示
+    const hands = { 'gu_btn': '✊', 'cho_btn': '✌️', 'par_btn': '✋' };
+    const choices = Object.keys(hands); //handsオブジェクトのキー（ID）を取得し配列に格納
+    //choices[0]（'gu_btn'）、choices[1]（'cho_btn'）、choices[2]（'par_btn'）
+    const computerChoice = choices[Math.floor(Math.random() * choices.length)]; //Object.keys(hands)によって生成されるchoices配列に3つの要素が含まれるため。
+    $("#computer-hand").text(hands[computerChoice]).css("visibility", "visible");
+
+    // 勝敗判定
+    determineWinner(userChoice, computerChoice);
+  });
+
+  function determineWinner(user, computer) {
+    let userWon = false;
+
+    // "あいこ"の場合、currentStateは変更しない
+    if (user === computer) {
+      $("#message").text("たべたい...").css("visibility", "visible");
+       // ここではupdatePancakeStateは呼び出さない
+      return;
+    }
+
+    const winConditions = {
+        'gu_btn': 'cho_btn',
+        'cho_btn': 'par_btn',
+        'par_btn': 'gu_btn'
+    };
+
+    if (winConditions[user] === computer) { //ユーザーの手が勝つ手の値が computer と一致するならば
+        $("#message").text("Yay!");
+        userWon = true;
+    } else {
+        $("#message").text("Oh no!");
+        userWon = false;
+    }
+
+    // 勝敗に応じてパンケーキの状態を更新
+    updatePancakeState(userWon);
+    $("#message").css("visibility", "visible");
+  }
+
+  $("#retry-button").on("click", function() {
+        // ゲームの状態をリセット
+        currentState = 3;
+        $("#computer-hand").css("visibility", "hidden");
+        $("#endgame-message").css("visibility", "hidden");
+        $(".play-button").show(); // PLAYボタンを再表示
+        $(this).hide(); // リトライボタンを隠す
+        $("#message").css("visibility", "hidden");
+        $(".pancake").attr("src", pancakeStates[currentState]); // 初期画像に戻す
+    });
+
+});
+    </script>
+</body>
+
+
+</html>

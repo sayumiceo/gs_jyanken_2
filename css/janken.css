@@ -1,0 +1,149 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    text-align: center; /* 中央揃え */
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 900;
+    background-color: #FFF8E7; /* 背景色 */
+}
+
+
+header {
+    font-size: 24px;
+    color: #333;
+    margin-top: 10px; /* Adjust the spacing as needed */
+    margin-bottom: 20px; /* タイトルとコンテンツの間のスペースを調整 */
+}
+
+
+.game-area {
+    position: relative; /* 相対位置指定を使用 */
+    text-align: center; /* これによりパンケーキが中央に来ます */
+    margin-top: 20px; /* タイトルとのスペースを確保 */
+    height: 300px;
+}
+
+.choices {
+    display: flex;
+    justify-content: center; /* 横並びに中央揃え */
+    align-items: center;
+    margin: 20px 0; /* Adjust spacing as needed */
+}
+
+.hand {
+    font-size: 2em; /* Larger emojis */
+    margin: 0 10px; /* アイコンの間隔 */
+    cursor: pointer; /* カーソルをポインターに */
+    background-color: white; /* 背景色を白に */
+    border: 2px solid white; /* Light grey border */
+    border-radius: 50%; /* 円形に */
+    display: inline-block;
+    width: 64px; /* アイコンのサイズを固定 */
+    height: 64px;
+    line-height: 64px; /* アイコンを垂直中央に */
+    margin: 0 10px; /* 余白を適切に *//* Space between hands */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow */
+    user-select: none; /* テキスト選択を防止 */
+    padding: 10px; /* Space around the emoji */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover */
+}
+
+
+.hand:hover {
+    transform: scale(1.1); /* Slightly larger on hover */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Stronger shadow on hover */
+}
+
+.hand.selected {
+    transform: scale(1.1); /* Slightly larger on hover */
+    border: 5px solid #c5815a; /* Darker border for selected */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Stronger shadow for selected */
+}
+
+
+.play-button {
+    background-color: #FFA500; /* ボタンの背景色 */
+    color: white; /* 文字色 */
+    border: none; /* 枠線なし */
+    border-radius: 20px; /* 角丸 */
+    padding: 10px 130px; /* 内側の余白 */
+    margin: 20px 0; /* 外側の余白 */
+    font-size: 20px; /* 文字のサイズ */
+    cursor: pointer; /* カーソルをポインターに */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+.play-button:hover {
+    background-color: #e68a00; /* マウスオーバーで色変更 */
+}
+
+.message {
+    /* font-family: "Gamja Flower", sans-serif; */
+    font-size: 24px; /* メッセージの文字サイズ */
+    color: #333; /* 文字色 */
+    margin: 20px 0; /* 上下の余白 */
+    visibility: hidden; /* 初期状態では非表示に */
+    height: 35px;
+}
+
+.computer-hand {
+    position: absolute;
+    left: 40%; /*適宜調整してください */
+    top: 50%; /* コンテナの中央に来るように調整 */
+    transform: translateY(-50%); /* Y軸に沿って中央に */
+    font-size: 3em; /* サイズを大きくしてください */
+    visibility: hidden; /* 初期状態では非表示に */
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pancake-container {
+    position: relative;
+    height: 300px; /* 画像の高さに合わせて調整 */
+    max-width: 600px; /* これは画像の幅に合わせて調整してください */
+    margin: 40px auto; /* 上下40pxのマージンを持ち、自動で左右中央に */
+}
+
+.pancake {
+    position: absolute;
+    bottom: 0; /* 画像をボトムに固定 */
+    left: 0; /* 左寄せ */
+    right: 0; /* 右寄せ */
+    margin-left: auto; /* 中央揃えのため */
+    margin-right: auto; /* 中央揃えのため */
+    max-width: 20%; /* 画像が画面幅に収まるように */
+    height: auto; /* 画像の高さを自動調整 */
+    display: inline-block;
+    vertical-align: middle; /* 親要素の中央に */
+}
+
+.endgame-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    color: #dd424a;
+    text-shadow: 2px 2px #000;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.retry-button {
+    background-color: #FFA500; /* ボタンの背景色 */
+    color: white; /* 文字色 */
+    border: none; /* 枠線なし */
+    border-radius: 20px; /* 角丸 */
+    padding: 10px 130px; /* 内側の余白 */
+    margin: 20px 0; /* 外側の余白 */
+    font-size: 20px; /* 文字のサイズ */
+    cursor: pointer; /* カーソルをポインターに */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+    display: none; /* 初期状態では非表示 */
+}
+
