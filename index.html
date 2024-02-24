@@ -10,16 +10,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Overlock:wght@900&family=Roboto:wght@500&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Overlock:wght@900&family=Roboto:wght@500&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<title>じゃんけん</title>
+<title>いちごパンケーキ食べて</title>
 </head>
 
 <body>
 
-    <header>
-        <h1>いちごパンケーキ全部食べて</h1>
-    </header>
+      <!-- タイトルと開始ボタン -->
+      <div id="start-container" class="start-container">
+        <h1>おやつの時間</h1>
+        <button id="start-button">は じ め る</button>
+    </div>
 
-    <main>
+
+    <main style="display: none;">  <!-- 初期状態では非表示 -->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <!-- いちごメーター  -->
+      <div id="level-container">
+        <span id="level">Level 0</span>
+        <div id="strawberries"></div>   
+      </div>
+
+      <div class="game-title">
+          <span class="title-word title-word-1">いちご</span>
+          <span class="title-word title-word-2">パンケーキ</span>
+          <span class="title-word title-word-3">全部</span>
+          <span class="title-word title-word-4">食べて</span>
+      </div>
+
         <!-- パンケーキの画像とコンピュータの手 -->
         <div class="game-area">
             <div id="computer-hand" class="computer-hand">🤖</div>
@@ -27,8 +46,8 @@
         </div>
         
         <!-- 勝敗のメッセージ -->
-        <div id="message" class="message"></div> <!-- 初期状態ではメッセージを空に。 -->
-    
+           <!-- 初期状態ではメッセージを空に。 -->  
+        <div id="message" class="message"></div> 
 
         <!-- ユーザーの選択（グー、チョキ、パー） -->
         <div class="choices">  
@@ -40,18 +59,41 @@
         <!-- Playボタン -->
         <button class="play-button">PLAY</button>
 
-        <!-- retry ボタン -->
-        <button id="retry-button" class="retry-button" style="display: none;">リトライ</button>
+        <!-- カロリーメーター  -->
+        <div class="meter-container">
+          <!-- maxを7に設定 -->
+          <progress id="calorie-meter" value="0" max="7"></progress> 
+          <label for="calorie-meter">摂取カロリー／１game</label>
+      </div>
 
-         <!-- end message  -->
-        <div id="endgame-message" class="endgame-message"></div>
+
+      <div id="popup-container" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <div id="endgame-message" class="endgame-message"></div>
+            <button id="next-button" class="next-button" style="display: none;">NEXT</button>
+            <button id="retry-button" class="retry-button" style="display: none;">リトライ</button>
+        </div>
+      </div>
 
     </main>
 
-    
     <footer></footer>
+
+    <!-- 紙吹雪 -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   
     <script>
+
+
+// 開始ボタンを押したときの処理
+ document.getElementById("start-button").addEventListener("click", function() {
+  // タイトルと開始ボタンを非表示
+  document.getElementById("start-container").style.display = "none";
+  // ゲームコンテンツを表示
+  document.querySelector("main").style.display = "block";
+});
+
+
 const pancakeStates = {
   // ゲームの状態が 数字 のときに表示する画像のパス
   0: './img/pancake00.png',
@@ -78,15 +120,11 @@ function updatePancakeState(won) {
   document.querySelector('.pancake').src = pancakeStates[currentState];
 
 
-  // ゲームオーバーまたは勝利のメッセージを表示
-     if (currentState === 0 || currentState === 7) {
+  if (currentState === 0) {
+        handleVictory(); // 勝利時の処理を呼び出し
 
-      // 条件 ? 真の場合の値 : 偽の場合の値;
-        const message = currentState === 0 ? "You successfully ate them all🤤🍴" : "NO MORE PANCAKES FOR ME🚫🤮";
-        
-        $("#endgame-message").text(message).css("visibility", "visible"); //非表示と表示を切り替え
-        $("#retry-button").show(); // リトライボタンを表示. display: none;が設定されていた要素を、画面上に表示
-        $(".play-button").hide(); // PLAYボタンを非表示に 
+      } else if (currentState === 7) {
+        handleGameOver(); // ゲームオーバー時の処理を呼び出し
     }
 }
 
@@ -100,6 +138,7 @@ $(document).ready(function() {
   // PLAYボタンを押すとゲームスタート
   $(".play-button").on("click", function() {
     const userChoice = $(".hand.selected").attr("id"); //選択された要素の id 属性の値を取得. 値を userChoice
+    
     if (!userChoice) {     //userChoice が偽っぽい値の場合
       alert("手を選んで！");
       return;
@@ -110,19 +149,34 @@ $(document).ready(function() {
     const choices = Object.keys(hands); //handsオブジェクトのキー（ID）を取得し配列に格納
     //choices[0]（'gu_btn'）、choices[1]（'cho_btn'）、choices[2]（'par_btn'）
     const computerChoice = choices[Math.floor(Math.random() * choices.length)]; //Object.keys(hands)によって生成されるchoices配列に3つの要素が含まれるため。
+   
     $("#computer-hand").text(hands[computerChoice]).css("visibility", "visible");
 
-    // 勝敗判定
-    determineWinner(userChoice, computerChoice);
+    const selectedHand = $(".hand.selected");
+    const handPosition = selectedHand.offset();
+    const handWidth = selectedHand.outerWidth();
+    const handHeight = selectedHand.outerHeight();
+
+    // 勝敗判定。および吹き出しメッセージの位置を調整。「手」の位置を関数に渡す。
+    determineWinner(userChoice, computerChoice, handPosition, handWidth, handHeight);
   });
 
-  function determineWinner(user, computer) {
-    let userWon = false;
+  function determineWinner(user, computer, handPosition, handWidth, handHeight) {
+    let userWon = false; //変数 userWon を宣言。初期値を false に設定。
+
+    // メッセージ表示関数を定義
+    function showMessage(message) {
+      $("#message").text(message).css("visibility", "visible");
+      $("#message").css({
+        "top": handPosition.top - $("#message").outerHeight() - 30 + "px", // 手の上にメッージを配置
+        "left": handPosition.left + (handWidth / 2) - ($("#message").outerWidth() / 2) + "px" // メッセージを手の中央に配置      });
+      });
+    }
 
     // "あいこ"の場合、currentStateは変更しない
     if (user === computer) {
-      $("#message").text("たべたい...").css("visibility", "visible");
-       // ここではupdatePancakeStateは呼び出さない
+      showMessage("たべたいたべたいたべたい...");
+      // ここではupdatePancakeStateは呼び出さない
       return;
     }
 
@@ -133,20 +187,24 @@ $(document).ready(function() {
     };
 
     if (winConditions[user] === computer) { //ユーザーの手が勝つ手の値が computer と一致するならば
-        $("#message").text("Yay!");
+        showMessage("おいしぃ♡");
         userWon = true;
-    } else {
-        $("#message").text("Oh no!");
-        userWon = false;
-    }
+        eatPancake(); // ユーザーが勝った場合、カロリーメーターを更新
+        
+      } else {
+          showMessage("Oh...魅惑のパンケーキタワー");
+          userWon = false;
+      }
 
     // 勝敗に応じてパンケーキの状態を更新
     updatePancakeState(userWon);
-    $("#message").css("visibility", "visible");
+
   }
 
-  $("#retry-button").on("click", function() {
-        // ゲームの状態をリセット
+});
+
+$("#retry-button").on("click", function() {
+        // リトライボタンが押された時の処理
         currentState = 3;
         $("#computer-hand").css("visibility", "hidden");
         $("#endgame-message").css("visibility", "hidden");
@@ -154,9 +212,123 @@ $(document).ready(function() {
         $(this).hide(); // リトライボタンを隠す
         $("#message").css("visibility", "hidden");
         $(".pancake").attr("src", pancakeStates[currentState]); // 初期画像に戻す
+        $("#popup-container").hide(); // ポップアップを非表示にする
+        $(".hand").removeClass("selected");  // 以前に選択されていた手の選択状態をリセット
+        currentCalories = 0; // カロリーをリセット
+        updateCalorieMeter();
     });
 
+function handleGameOver() {
+    $("#endgame-message").text("Oh no! 人類滅亡の危機。").css("visibility", "visible");
+    document.getElementById("endgame-message").className = "message-fail"; // 新しいスタイルを適用
+    $("#retry-button").show(); // リトライボタンを表示
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    $("#popup-container").show(); // ポップアップを表示
+    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
+}
+
+
+// カロリーメーター
+let currentCalories = 0;
+const maxCalories = 7; // 最大カロリーを7に設定
+
+// カロリーメーターを更新する関数
+function updateCalorieMeter() {
+    const meter = document.getElementById('calorie-meter');
+    meter.value = currentCalories;
+}
+
+// カロリーメーター パンケーキを食べると呼ばれる関数
+function eatPancake() {
+    if (currentCalories < maxCalories) {
+        currentCalories++; // 1枚食べるごとにカロリーを1増やす
+        updateCalorieMeter();
+
+    // currentState が 0 かつ カロリーメーターが最大値に達した場合に勝利処理を実行
+    if (currentState === 0 && currentCalories === maxCalories) {
+        handleVictory(); // 勝利処理を実行
+    }
+    // それ以外の状態でカロリーメーターが最大値に達した場合はゲームオーバー処理を実行
+    else if (currentState !== 0 && currentCalories === maxCalories) {
+        handleCalorieOver(); // ゲームオーバーの処理を実行
+    }
+}
+
+function handleCalorieOver() {
+    $("#endgame-message").text("めたぼの極みね。ぷにぷにトランポリン？").css("visibility", "visible");
+    document.getElementById("endgame-message").className = "message-CalorieOver"; // 新しいスタイルを適用
+    $("#retry-button").show(); // リトライボタンを表示
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    $("#popup-container").show(); // ポップアップを表示
+    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
+}
+
+
+// レベルの初期値
+let level = 0; 
+
+  // レベルを表示する関数
+  function displayLevel() {
+      document.getElementById('level').textContent = `Level ${level}`;
+      let strawberries = '';
+      for (let i = 0; i < level; i++) {
+          strawberries += '🍓'; // イチゴの絵文字を追加
+      }
+      document.getElementById('strawberries').innerHTML = strawberries;
+  }
+
+  // ゲームで勝利した場合にレベルを上げる関数
+  function levelUp() {
+      level++; // レベルを1増やす
+      displayLevel(); // レベルの表示を更新
+  }
+
+// 紙吹雪を表示する関数
+function showConfetti() {
+    // 紙吹雪のエフェクト
+    confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 }
+    });
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    console.log('Showing confetti!');
+}
+
+// レベルを表示し、紙吹雪を表示する
+function handleVictory() {
+  levelUp(); // レベルアップの処理
+    showConfetti(); // 紙吹雪の演出を表示
+
+    // 紙吹雪が終了した2秒後にNEXTボタンを表示する
+    setTimeout(function() {
+    $("#endgame-message").text("You successfully ate them all🤤🍴").css("visibility", "visible");
+    document.getElementById("endgame-message").className = "message-success"; // 新しいスタイルを適用
+    $("#next-button").show(); // NEXTボタンを表示
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    $("#popup-container").show(); // ポップアップを表示   
+    document.getElementById("popup-container").className = "popup-success"; // 新しいスタイルを適用  
+    }, 2000); // 2000ミリ秒（2秒）の遅延
+}
+
+
+// NEXTボタンがクリックされたときの処理
+$("#next-button").on("click", function() {
+    // ゲームをリセットし、次のレベルの準備をする
+    currentState = 3; // ゲームの状態をリセット
+    $(this).hide(); // NEXTボタンを隠す
+    $(".play-button").show(); // PLAYボタンを再表示
+    $("#endgame-message").css("visibility", "hidden"); // エンドメッセージを非表示にする
+    $("#computer-hand").css("visibility", "hidden");
+    $("#message").css("visibility", "hidden");
+    $(".pancake").attr("src", pancakeStates[currentState]); // 初期画像に戻す
+    $("#popup-container").hide(); // ポップアップを非表示にする
+    $(".hand").removeClass("selected");  // 以前に選択されていた手の選択状態をリセット
+    currentCalories = 0; // 摂取カロリーメーターをリセット
+    updateCalorieMeter(); // カロリーメーターを更新する
+    displayLevel(); // レベル表示の更新
 });
+
     </script>
 </body>
 

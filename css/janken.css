@@ -1,3 +1,117 @@
+.start-container {
+    display: flex; /* Flexboxを有効 */
+    justify-content: center; /* 水平方向を中央揃えにする */
+    align-items: center; /* 垂直方向を中央揃えにする */
+    background: radial-gradient(ellipse at center, #ffc3de 0%, rgb(251, 236, 179) 100%);
+    height: 100vh; /*コンテナを画面全体に表示*/
+    width: 100vw; /*コンテナを画面全体に表示*/
+    margin: 0;
+    text-align: center; 
+}
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:900');
+
+h1 {
+    position: absolute;
+    margin: 0;
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 750;
+    font-size: 10vh;
+    letter-spacing: 1vw;
+    top: 15vh;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background:url(/img/start.webp);
+    background-size: cover;
+    background-clip: text;
+    text-emphasis-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 25s linear infinite;
+}
+
+@keyframes shine {
+    0% {
+        /* 水平方向の中央（50%）、垂直方向上端（0%） */
+        background-position: 50% 0%;
+    }
+    100% {
+        /* 水平方向の中央（50%）、垂直方向下端（100%） */
+        background-position: 50% 100%;
+    }
+}
+
+#start-button {
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 700;
+    display: block; /* ボタンをブロック要素として扱う */
+    margin: 0 auto; /* 上下のマージンを0にし、左右のマージンを自動で中央揃えにする */
+    background-color: #fc9bb8; /* ボタンの背景色 */
+    color: white; /* 文字色 */
+    border: none; /* 枠線なし */
+    border-radius: 40px; /* 角丸 */
+    padding: 10px 130px; /* 内側の余白 */
+    font-size: 20px; /* 文字のサイズ */
+    cursor: pointer; /* カーソルをポインターに */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+#start-button:hover {
+    background-color: #fafafa52; /* マウスオーバーで色変更 */
+}
+
+  
+.game-title {
+    color: rgb(75, 75, 75);
+    position: relative; /* ヘッダーを相対位置に設定 */
+    font-size: 24px;
+    margin-top: 10px; /* Adjust the spacing as needed */
+    margin-bottom: 20px; /* タイトルとコンテンツの間のスペースを調整 */    
+}
+
+.title-word {
+    animation: color-animation 4s linear infinite;
+  }
+  
+  .title-word-1 {
+    --color-1: #DF8453;
+    --color-2: #70c9ef;
+    --color-3: #e4aba8;
+  }
+  
+  .title-word-2 {
+    --color-1: #dbad4a;
+    --color-2: #93b385;
+    --color-3: #7cd6dd;
+  }
+  
+  .title-word-3 {
+    --color-1: #ACCFCB;
+    --color-2: #E4A9A8;
+    --color-3: #c3accf;
+  }
+  
+  .title-word-4 {
+    --color-1: #7aafc6;
+    --color-2: #f09868;
+    --color-3: #f9abcd;
+  }
+  
+  @keyframes color-animation {
+    0%    {color: var(--color-1)}
+    32%   {color: var(--color-1)}
+    33%   {color: var(--color-2)}
+    65%   {color: var(--color-2)}
+    66%   {color: var(--color-3)}
+    99%   {color: var(--color-3)}
+    100%  {color: var(--color-1)}
+  }
+  
+
+
+
 body, html {
     margin: 0;
     padding: 0;
@@ -7,18 +121,9 @@ body, html {
     background-color: #FFF8E7; /* 背景色 */
 }
 
-
-header {
-    font-size: 24px;
-    color: #333;
-    margin-top: 10px; /* Adjust the spacing as needed */
-    margin-bottom: 20px; /* タイトルとコンテンツの間のスペースを調整 */
-}
-
-
 .game-area {
     position: relative; /* 相対位置指定を使用 */
-    text-align: center; /* これによりパンケーキが中央に来ます */
+    text-align: center; /* パンケーキ中央 */
     margin-top: 20px; /* タイトルとのスペースを確保 */
     height: 300px;
 }
@@ -27,7 +132,8 @@ header {
     display: flex;
     justify-content: center; /* 横並びに中央揃え */
     align-items: center;
-    margin: 20px 0; /* Adjust spacing as needed */
+    margin-top: 60px; /* Adjust spacing as needed */
+    margin-bottom: 20px;
 }
 
 .hand {
@@ -56,7 +162,7 @@ header {
 
 .hand.selected {
     transform: scale(1.1); /* Slightly larger on hover */
-    border: 5px solid #c5815a; /* Darker border for selected */
+    border: 5px solid #FFA500; /* Darker border for selected */
     box-shadow: 0 0 15px rgba(0,0,0,0.2); /* Stronger shadow for selected */
 }
 
@@ -69,22 +175,40 @@ header {
     padding: 10px 130px; /* 内側の余白 */
     margin: 20px 0; /* 外側の余白 */
     font-size: 20px; /* 文字のサイズ */
+    font-weight: 600;
     cursor: pointer; /* カーソルをポインターに */
     transition: background-color 0.3s ease; /* Smooth transition for hover */
 }
 
 .play-button:hover {
-    background-color: #e68a00; /* マウスオーバーで色変更 */
+    background-color: rgb(223, 148, 35); /* マウスオーバーで色変更 */
 }
 
+
 .message {
-    /* font-family: "Gamja Flower", sans-serif; */
-    font-size: 24px; /* メッセージの文字サイズ */
+    font-size: 14px; /* メッセージの文字サイズ */
     color: #333; /* 文字色 */
-    margin: 20px 0; /* 上下の余白 */
     visibility: hidden; /* 初期状態では非表示に */
-    height: 35px;
+    background-color: #fff; /* 白背景 */
+    border-radius: 40px; /* 角を丸く */
+    box-shadow: 0 0 10px rgba(12, 12, 12, 0.1); /* 軽い影で立体感を出す */
+    padding: 10px 20px; /* 内側の余白 */
+    width: auto; /* 幅はコンテンツに応じて自動調整 */
+    max-width: 60%; /* 最大幅 */
+    margin: 10px auto; /* 上下の余白と中央寄せ */
+    position: absolute; /* 吹き出しの尖りや他の装飾を追加するための基準点 */
+    display: inline-block; /* 要素をインラインブロックに設定して幅をコンテンツに合わせる */
 }
+
+.message::after {
+    content: "";
+    position: absolute;
+    bottom: -20px; /* 吹き出しの下部から出るように位置調整 */
+    left: 50%; /* 左側から50%の位置に配置 */
+    transform: translateX(-50%); /* 中央寄せのために自身の幅の半分を左にずらす */
+    border: 10px solid transparent; /* 透明なボーダー */
+    border-top-color: #fff; /* 上部のボーダーだけ白に */
+  }
 
 .computer-hand {
     position: absolute;
@@ -116,34 +240,189 @@ header {
     right: 0; /* 右寄せ */
     margin-left: auto; /* 中央揃えのため */
     margin-right: auto; /* 中央揃えのため */
-    max-width: 20%; /* 画像が画面幅に収まるように */
+    max-width: 280px; /* 画像が画面幅に収まるように */
     height: auto; /* 画像の高さを自動調整 */
     display: inline-block;
     vertical-align: middle; /* 親要素の中央に */
 }
 
-.endgame-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.message-fail {
+    /* "NO MORE PANCAKES FOR ME🚫🤮" メッセージ用のスタイル */
     font-size: 2em;
-    color: #dd424a;
-    text-shadow: 2px 2px #000;
+    color: #f7424b;
+    text-shadow: 2px 2px #000000;
     visibility: hidden;
-    z-index: 10;
+    margin-bottom: 30px; /* メッセージとボタンの間のスペースを確保 */
+    text-align: center; /* メッセージを中央揃えに */
 }
 
+.message-success {
+    /* "You successfully ate them all🤤🍴" メッセージ用のスタイル */
+    font-size: 2em;
+    color: #f9eeee;
+    text-shadow: 2px 2px #82ecff89;
+    visibility: hidden;
+    margin-bottom: 30px; /* メッセージとボタンの間のスペースを確保 */
+    text-align: center; /* メッセージを中央揃えに */
+}
+
+
+
 .retry-button {
-    background-color: #FFA500; /* ボタンの背景色 */
+    background-color: #a4ee3d; /* ボタンの背景色 */
     color: white; /* 文字色 */
     border: none; /* 枠線なし */
-    border-radius: 20px; /* 角丸 */
+    border-radius: 40px; /* 角丸 */
     padding: 10px 130px; /* 内側の余白 */
-    margin: 20px 0; /* 外側の余白 */
     font-size: 20px; /* 文字のサイズ */
     cursor: pointer; /* カーソルをポインターに */
     transition: background-color 0.3s ease; /* Smooth transition for hover */
     display: none; /* 初期状態では非表示 */
+    display: block; /* ブロック要素として表示 */
+    width: auto; /* テキストの長さに合わせて幅を調整 */
+    margin: 0 auto; /* 水平方向に自動マージンを設定して中央揃えに */
 }
 
+/* ボタンのホバー効果 */
+.retry-button:hover {
+    background-color: #c8ff7b;
+}
+
+.message-CalorieOver {
+    /* カロリーおーばー メッセージ用のスタイル */
+    font-size: 2em;
+    color: #fdf5f5;
+    text-shadow: 2px 2px #000000;
+    visibility: hidden;
+    margin-bottom: 30px; /* メッセージとボタンの間のスペースを確保 */
+    text-align: center; /* メッセージを中央揃えに */
+}
+
+
+.meter-container {
+    color: #5f5e5e;
+    width: 20%; 
+    margin: 0 auto; /* 中央寄せ */
+    
+}
+
+.meter-container progress {
+    width: 100%; 
+    margin: 0 auto; /* 中央寄せ */
+    margin-bottom: 10px; /* メーターとラベルの間のスペースを増やす */
+    margin-top: 10px;
+}
+
+.meter-container label {
+    display: block; /* ラベルをブロック要素として表示 */
+    text-align: center; /* テキストを中央揃え */
+}
+
+progress {
+    width: 100%; /* コンテナの幅に合わせて100%に設定 */
+}
+
+/* スタイルのカスタマイズ */
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 20px; /* Specified height */
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: #ED7C7D ; /* 進行状況を表す色 */
+  border-radius: 10px;
+}
+
+#level-container {
+    background-color: rgba(255, 255, 255, 0.572); /* 白背景 */
+    display: flex; /* フレックスボックスを使用して要素を一列に並べる */
+    align-items: center; /* アイテムを垂直方向の中央に配置 */
+    justify-content: center; /* アイテムを水平方向の中央に配置 */
+    padding: 10px; /* 余白を設定 */
+    border-radius: 20px; /* 角を丸くする */
+    position: relative; 
+    font-size: 1.2em; /* フォントサイズ */
+    color: #333; /* テキストの色 */
+    margin-bottom: 20px;
+}
+
+#level {
+    margin-right: 10px; /* 右に余白を設定 */
+  }
+  
+  #strawberries {
+    display: flex; /* フレックスボックスを使用して要素を一列に並べる */
+  }
+
+
+.next-button {
+    background-color: #3bcef6; /* ボタンの背景色 */
+    color: white; /* テキストの色 */
+    border: none; /* 枠線を無くす */
+    padding: 10px 130px; /* ボタンの内側の余白 */
+    font-size: 1.3em; /* フォントサイズ */
+    cursor: pointer; /* カーソルを指の形に */
+    border-radius: 40px; /* 角を丸くする */
+    margin-top: 20px; /* 上の要素からの余白 */
+    display: none; /* 初期状態では非表示に */
+    display: block; /* ブロック要素として表示 */
+    width: auto; /* テキストの長さに合わせて幅を調整 */
+    margin: 0 auto; /* 水平方向に自動マージンを設定して中央揃えに */
+}
+
+/* ボタンのホバー効果 */
+.next-button:hover {
+    background-color: #77d8f3;
+}
+
+/* ストロベリーアイコンのスタイリング */
+#strawberries {
+    font-size: 1.5em; /* アイコンサイズ */
+}
+
+/* ゲームオーバーポップアップ */
+.popup-fail {
+    position: fixed; /* 画面全体に表示 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em; /* フォントサイズ */
+    background-color: rgba(16, 16, 16, 0.732);  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 他の要素より前面に */
+    transition: all 0.5s ease; /* すべてのプロパティの変更を0.5秒かけて滑らかに適用する */
+}
+
+/* 勝利ポップアップ */
+.popup-success {
+    position: fixed; /* 画面全体に表示 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em; /* フォントサイズ */
+    background-color: rgba(250, 142, 209, 0.7);  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 他の要素より前面に */
+    transition: all 0.5s ease; /* すべてのプロパティの変更を0.5秒かけて滑らかに適用する */
+}
+
+.popup-content {
+    padding: 100px;
+    border-radius: 100px;
+    width: auto; /* コンテンツの幅に合わせて調整 */
+    max-width: 90%; /* 画面幅に対する最大幅 */
+}
