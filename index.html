@@ -94,40 +94,6 @@
 });
 
 
-const pancakeStates = {
-  // ゲームの状態が 数字 のときに表示する画像のパス
-  0: './img/pancake00.png',
-  1: './img/pancake01.png',
-  2: './img/pancake02.png',
-  3: './img/pancake03.png',
-  4: './img/pancake04.png',
-  5: './img/pancake05.png',
-  6: './img/pancake06.png',
-  7: './img/pancake07.png'
-};
-
-let currentState = 3; // Starting state
-
- // currentStateが0または7になったときの処理
-function updatePancakeState(won) {
-  if (won) {
-    currentState = Math.max(0, currentState - 1); // 0が最小値
-  } else {
-    currentState = Math.min(7, currentState + 1); // 7が最大値
-  }
-
-  // Update the image source css読み込み・画像切り替え
-  document.querySelector('.pancake').src = pancakeStates[currentState];
-
-
-  if (currentState === 0) {
-        handleVictory(); // 勝利時の処理を呼び出し
-
-      } else if (currentState === 7) {
-        handleGameOver(); // ゲームオーバー時の処理を呼び出し
-    }
-}
-
 $(document).ready(function() {
   // ユーザーが手を選択
   $(".hand").on("click", function() {
@@ -203,6 +169,95 @@ $(document).ready(function() {
 
 });
 
+const pancakeStates = {
+  // ゲームの状態が 数字 のときに表示する画像のパス
+  0: './img/pancake00.png',
+  1: './img/pancake01.png',
+  2: './img/pancake02.png',
+  3: './img/pancake03.png',
+  4: './img/pancake04.png',
+  5: './img/pancake05.png',
+  6: './img/pancake06.png',
+  7: './img/pancake07.png'
+};
+
+let currentState = 3; // Starting state
+
+ // currentStateが0または7になったときの処理
+function updatePancakeState(won) {
+  if (won) {
+    currentState = Math.max(0, currentState - 1); // 0が最小値
+  } else {
+    currentState = Math.min(7, currentState + 1); // 7が最大値
+  }
+
+  // Update the image source css読み込み・画像切り替え
+  document.querySelector('.pancake').src = pancakeStates[currentState];
+
+  if (currentState === 0) {
+        handleVictory(); // 勝利時の処理を呼び出し
+
+      } else if (currentState === 7) {
+        handleGameOver(); // ゲームオーバー時の処理を呼び出し
+    }
+     // カロリーが最大値に達した場合の処理
+     if (currentCalories === maxCalories) {
+        // currentState が 0 の場合は勝利処理
+        if (currentState === 0) {
+            handleVictory(); // 勝利処理を実行
+        }
+        // currentState が 7 の場合はゲームオーバー処理
+        else if (currentState === 7) {
+            handleGameOver(); // ゲームオーバー処理を実行
+        }
+        // それ以外の場合はカロリーオーバー処理
+        else {
+            handleCalorieOver(); // カロリーオーバーの処理を実行
+        }
+    }
+}
+
+
+
+// カロリーメーター
+let currentCalories = 0;
+const maxCalories = 7; // 最大カロリーを7に設定
+
+// カロリーメーターを更新する関数
+function updateCalorieMeter() {
+    const meter = document.getElementById('calorie-meter');
+    meter.value = currentCalories;
+}
+
+// カロリーメーター パンケーキを食べると呼ばれる関数
+function eatPancake() {
+   // カロリーが最大値未満の場合のみカロリーを増やす
+    if (currentCalories < maxCalories) {
+        currentCalories++; // 1枚食べるごとにカロリーを1増やす
+        updateCalorieMeter();
+      }
+}
+
+function handleCalorieOver() {
+    $("#endgame-message").text("めたぼの極みね。ぷにぷにトランポリン？").css("visibility", "visible");
+    document.getElementById("endgame-message").className = "message-CalorieOver"; // 新しいスタイルを適用
+    $("#retry-button").show(); // リトライボタンを表示
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    $("#popup-container").show(); // ポップアップを表示
+    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
+}
+
+
+
+function handleGameOver() {
+    $("#endgame-message").text("Oh no! 人類滅亡の危機。").css("visibility", "visible");
+    document.getElementById("endgame-message").className = "message-fail"; // 新しいスタイルを適用
+    $("#retry-button").show(); // リトライボタンを表示
+    $(".play-button").hide(); // PLAYボタンを非表示にする
+    $("#popup-container").show(); // ポップアップを表示
+    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
+}
+
 $("#retry-button").on("click", function() {
         // リトライボタンが押された時の処理
         currentState = 3;
@@ -218,59 +273,11 @@ $("#retry-button").on("click", function() {
         updateCalorieMeter();
     });
 
-function handleGameOver() {
-    $("#endgame-message").text("Oh no! 人類滅亡の危機。").css("visibility", "visible");
-    document.getElementById("endgame-message").className = "message-fail"; // 新しいスタイルを適用
-    $("#retry-button").show(); // リトライボタンを表示
-    $(".play-button").hide(); // PLAYボタンを非表示にする
-    $("#popup-container").show(); // ポップアップを表示
-    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
-}
-
-
-// カロリーメーター
-let currentCalories = 0;
-const maxCalories = 7; // 最大カロリーを7に設定
-
-// カロリーメーターを更新する関数
-function updateCalorieMeter() {
-    const meter = document.getElementById('calorie-meter');
-    meter.value = currentCalories;
-}
-
-// カロリーメーター パンケーキを食べると呼ばれる関数
-function eatPancake() {
-    if (currentCalories < maxCalories) {
-        currentCalories++; // 1枚食べるごとにカロリーを1増やす
-        updateCalorieMeter();
-
-    // currentState が 0 かつ カロリーメーターが最大値に達した場合に勝利処理を実行
-    if (currentState === 0 && currentCalories === maxCalories) {
-        handleVictory(); // 勝利処理を実行
-    }
-    // それ以外の状態でカロリーメーターが最大値に達した場合はゲームオーバー処理を実行
-    else if (currentState !== 0 && currentCalories === maxCalories) {
-        handleCalorieOver(); // ゲームオーバーの処理を実行
-    }
-}
-
-}
-
-function handleCalorieOver() {
-    $("#endgame-message").text("めたぼの極みね。ぷにぷにトランポリン？").css("visibility", "visible");
-    document.getElementById("endgame-message").className = "message-CalorieOver"; // 新しいスタイルを適用
-    $("#retry-button").show(); // リトライボタンを表示
-    $(".play-button").hide(); // PLAYボタンを非表示にする
-    $("#popup-container").show(); // ポップアップを表示
-    document.getElementById("popup-container").className = "popup-fail"; // 新しいスタイルを適用  
-}
-
-
 
 // レベルの初期値
 let level = 0; 
 
-  // レベルを表示する関数
+// レベルを表示する関数
   function displayLevel() {
       document.getElementById('level').textContent = `Level ${level}`;
       let strawberries = '';
@@ -280,7 +287,7 @@ let level = 0;
       document.getElementById('strawberries').innerHTML = strawberries;
   }
 
-  // ゲームで勝利した場合にレベルを上げる関数
+  // レベルの更新。ゲームで勝利した場合にレベルを上げる関数
   function levelUp() {
       level++; // レベルを1増やす
       displayLevel(); // レベルの表示を更新
@@ -298,7 +305,7 @@ function showConfetti() {
     console.log('Showing confetti!');
 }
 
-// レベルを表示し、紙吹雪を表示する
+// 勝利の場合。レベルを表示し、紙吹雪を表示する
 function handleVictory() {
   levelUp(); // レベルアップの処理
     showConfetti(); // 紙吹雪の演出を表示
