@@ -9,7 +9,7 @@
     text-align: center; 
 }
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:900');
+/* @import url('https://fonts.googleapis.com/css?family=Montserrat:900'); */
 
 h1 {
     position: absolute;
@@ -23,7 +23,7 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    background:url(/img/start.webp);
+    background:url(/img/start.png);
     background-size: cover;
     background-clip: text;
     text-emphasis-color: transparent;
