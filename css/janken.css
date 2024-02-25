@@ -349,12 +349,19 @@ progress[value]::-webkit-progress-value {
   border-radius: 10px;
 }
 
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
 #warningMessage {
     color: #f76d70;
     font-size: 1em;
     visibility: hidden; /* 初期状態では非表示に */
     border-radius: 40px; /* 角を丸く */
     position: relative; /* 吹き出しの尖りや他の装飾を追加するための基準点 */
+    animation: blink 1s infinite; /* 1秒間隔で無限に点滅 */
 }
 
 #level-container {
