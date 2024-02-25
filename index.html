@@ -59,12 +59,15 @@
         <!-- Playボタン -->
         <button class="play-button">PLAY</button>
 
+        <div id="warningMessage"></div>
+
         <!-- カロリーメーター  -->
         <div class="meter-container">
           <!-- maxを7に設定 -->
           <progress id="calorie-meter" value="0" max="7"></progress> 
           <label for="calorie-meter">摂取カロリー／１game</label>
       </div>
+
 
 
       <div id="popup-container" class="popup-container" style="display: none;">
@@ -194,6 +197,7 @@ function updatePancakeState(won) {
   // Update the image source css読み込み・画像切り替え
   document.querySelector('.pancake').src = pancakeStates[currentState];
 
+
   if (currentState === 0) {
         handleVictory(); // 勝利時の処理を呼び出し
 
@@ -236,6 +240,15 @@ function eatPancake() {
         currentCalories++; // 1枚食べるごとにカロリーを1増やす
         updateCalorieMeter();
       }
+
+  // Check if the current calories have reached 6 and display a warning message
+  if (currentCalories === 6) {
+    $("#warningMessage").text("おなか破裂間近😨").css("visibility", "visible");
+  } else {
+    // Clear the warning message if the condition is no longer met
+    $("#warningMessage").css("visibility", "hidden");
+  }
+
 }
 
 function handleCalorieOver() {
@@ -266,6 +279,7 @@ $("#retry-button").on("click", function() {
         $(".play-button").show(); // PLAYボタンを再表示
         $(this).hide(); // リトライボタンを隠す
         $("#message").css("visibility", "hidden");
+        $("#warningMessage").css("visibility", "hidden");
         $(".pancake").attr("src", pancakeStates[currentState]); // 初期画像に戻す
         $("#popup-container").hide(); // ポップアップを非表示にする
         $(".hand").removeClass("selected");  // 以前に選択されていた手の選択状態をリセット
@@ -318,7 +332,7 @@ function handleVictory() {
     $(".play-button").hide(); // PLAYボタンを非表示にする
     $("#popup-container").show(); // ポップアップを表示   
     document.getElementById("popup-container").className = "popup-success"; // 新しいスタイルを適用  
-    }, 2000); // 2000ミリ秒（2秒）の遅延
+    }, 1500); // 2000ミリ秒（2秒）の遅延
 }
 
 
@@ -331,6 +345,7 @@ $("#next-button").on("click", function() {
     $("#endgame-message").css("visibility", "hidden"); // エンドメッセージを非表示にする
     $("#computer-hand").css("visibility", "hidden");
     $("#message").css("visibility", "hidden");
+    $("#warningMessage").css("visibility", "hidden");
     $(".pancake").attr("src", pancakeStates[currentState]); // 初期画像に戻す
     $("#popup-container").hide(); // ポップアップを非表示にする
     $(".hand").removeClass("selected");  // 以前に選択されていた手の選択状態をリセット
